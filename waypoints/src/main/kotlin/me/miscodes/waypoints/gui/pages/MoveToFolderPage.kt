@@ -1,0 +1,94 @@
+package me.miscodes.waypoints.gui.pages
+
+import com.okkero.skedule.SynchronizationContext
+import com.okkero.skedule.switchContext
+import de.md5lukas.commons.collections.PaginationList
+import de.md5lukas.commons.paper.placeholder
+import de.md5lukas.kinvs.GUIPattern
+import de.md5lukas.kinvs.items.GUIItem
+import me.miscodes.waypoints.WaypointsPermissions
+import me.miscodes.waypoints.api.Folder
+import me.miscodes.waypoints.api.Type
+import me.miscodes.waypoints.api.Waypoint
+import me.miscodes.waypoints.gui.WaypointsGUI
+import net.kyori.adventure.text.Component
+
+class MoveToFolderPage(wpGUI: WaypointsGUI, private val waypoint: Waypoint) :
+    ListingPage<Folder>(wpGUI, wpGUI.extendApi { waypoint.type.getBackgroundItem() }) {
+
+  override val title: Component =
+      wpGUI.translations.INVENTORY_TITLE_SELECT_FOLDER.withReplacements(
+          "waypoint" placeholder waypoint.name
+      )
+
+  override suspend fun getContent() =
+      PaginationList<Folder>(PAGINATION_LIST_PAGE_SIZE).also {
+        it.addAll(wpGUI.getHolderForType(waypoint.type).getFolders())
+
+        val viewerId = wpGUI.viewerData.id
+        if (
+            wpGUI.plugin.waypointsConfig.features.publicOwnership.folders &&
+                waypoint.type == Type.PUBLIC &&
+                viewerId == waypoint.owner &&
+                !wpGUI.viewer.hasPermission(WaypointsPermissions.MODIFY_PUBLIC)
+        ) {
+          it.retainAll { folder -> viewerId == folder.owner }
+        }
+      }
+
+  override suspend fun toGUIContent(value: Folder) =
+      wpGUI.extendApi {
+        GUIItem(value.getItem(wpGUI.viewer)) {
+          wpGUI.playSound { click.success }
+          wpGUI.skedule {
+            waypoint.setFolder(value)
+            switchContext(SynchronizationContext.SYNC)
+            wpGUI.goBack()
+          }
+        }
+      }
+
+  private companion object {
+    /** p = Previous g = No folder b = Back n = Next */
+    val controlsPattern = GUIPattern("p__g_b__n")
+  }
+
+  private fun updateControls() {
+    applyPattern(
+        controlsPattern,
+        4,
+        0,
+        background,
+        'p' to
+            GUIItem(wpGUI.translations.GENERAL_PREVIOUS.item) {
+              wpGUI.playSound { click.normal }
+              previousPage()
+            },
+        'n' to
+            GUIItem(wpGUI.translations.GENERAL_NEXT.item) {
+              wpGUI.playSound { click.normal }
+              nextPage()
+            },
+        'g' to
+            GUIItem(wpGUI.translations.SELECT_FOLDER_NO_FOLDER.item) {
+              wpGUI.playSound { click.success }
+              wpGUI.skedule {
+                waypoint.setFolder(null)
+                switchContext(SynchronizationContext.SYNC)
+                wpGUI.goBack()
+              }
+            },
+        'b' to
+            GUIItem(wpGUI.translations.GENERAL_BACK.item) {
+              wpGUI.playSound { click.normal }
+              wpGUI.goBack()
+            },
+    )
+  }
+
+  override suspend fun init() {
+    super.init()
+    updateListingInInventory()
+    updateControls()
+  }
+}
