@@ -1,10 +1,8 @@
-name: Waypoints
+name: SMPWaypoints
 authors:
-  - Md5Lukas
+  - Miscodes
 main: me.miscodes.waypoints.WaypointsPlugin
 version: ${version}
-
-website: https://github.com/Sytm/waypoints
 
 api-version: "${apiVersion}"
 folia-supported: true

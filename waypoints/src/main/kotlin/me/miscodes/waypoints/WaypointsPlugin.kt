@@ -105,7 +105,7 @@ class WaypointsPlugin : JavaPlugin() {
     try {
       Class.forName("io.papermc.paper.configuration.Configuration")
     } catch (_: ClassNotFoundException) {
-      logger.log(Level.SEVERE, "Waypoints requires the Paper server implementation")
+      logger.log(Level.SEVERE, "SMPWaypoints requires the Paper server implementation")
       server.pluginManager.disablePlugin(this)
       return
     }

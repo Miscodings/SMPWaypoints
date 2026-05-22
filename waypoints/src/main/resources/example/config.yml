@@ -1,0 +1,415 @@
+database:
+  # Time period after which death waypoints are deleted. Set all values to zero to disable
+  deathWaypointRetentionPeriod:
+    years: 0
+    months: 0
+    days: 7
+
+  # Configure the creation of database backups in plugins/Waypoints/backups
+  backup:
+    enable: true
+    backupInterval: 3d
+
+    # The amount of automatically created backups to keep.
+    # Files that have been renamed from the default names are ignored during counting and removal.
+    retainLastN: 7
+general:
+  # Set the language for the plugin here
+  language: en
+  updateChecker: true
+
+  # What to do when a waypoint is loaded that is in a world that has been deleted / renamed. Available options:
+  # SHOW: Shows the waypoint normally, but cannot be selected or teleported to
+  # HIDE: The waypoint will be hidden in the GUI, but will reappear once the world is back
+  # DELETE: The waypoint will be permanently deleted
+  worldNotFound: HIDE
+
+  # When this option is enabled players will only see waypoints that are in the same world as themselves
+  hideWaypointsFromDifferentWorlds: false
+features:
+  # Set to "false" to disable public waypoints
+  publicWaypoints: true
+
+  # Set to "false" to disable permission waypoints
+  permissionWaypoints: false
+
+  # Set to "false" to disable death waypoints
+  deathWaypoints: true
+
+  # Set to "false" to disable teleportations for everyone entirely
+  teleportation: true
+  publicOwnership:
+    # Set to "true" to allow all players to create public waypoints, but only be allowed to edit the ones they created
+    waypoints: false
+
+    # Set to "true" to allow all players to create public folders, but only be allowed to edit the ones they created
+    # Players can only move waypoints into folders they created
+    folders: true
+
+# Specify additional aliases for the two commands Waypoints uses in case other plugins overwrite them
+commandAliases:
+  waypoints:
+    - wp
+  waypointsScript:
+    - wps
+pointToDeathWaypointOnDeath:
+  enabled: true
+
+  # When set to a value greater than zero, the death waypoint will be automatically deselected after the set time
+  autoDeselectAfter: 0s
+
+# Specify in which worlds waypoints can be created
+# Players with the permission waypoints.modify.anywhere can place waypoints wherever they want.
+# Automatic waypoint-creation in disabled worlds will not occur
+availableWorlds:
+  # Available options:
+  # blacklist: Worlds in the list are not available
+  # whitelist: Only worlds on the list are available
+  type: BLACKLIST
+  worlds:
+    - hub
+openWithItem:
+  enabled: true
+
+  # Available options are RIGHT (right-click) and LEFT (left-click)
+  click: RIGHT
+
+  # If set to true the player must sneak and then use the item to open the inventory
+  # Otherwise it doesn't matter if the player is sneaking
+  mustSneak: true
+
+  # Any of the following item can be used to open the GUI
+  items:
+    - compass
+
+# When placing named banners, they will automatically create a private waypoint at the location of the banner
+bannerWaypoints:
+  enabled: true
+  bannerBreaking:
+    # When breaking the banner, whether the waypoint should be removed as well
+    removeWaypoint: true
+
+    # When true, the waypoint is only removed if the player who originally placed the banner was the one breaking it
+    triggerOnlyForOwner: true
+customIconFilter:
+  # Available options:
+  # blacklist: Items in the list are forbidden
+  # whitelist: Only items on the list are allowed
+  type: BLACKLIST
+
+  # air is always disallowed
+  materials:
+    - barrier
+    - bedrock
+limits:
+  waypoints:
+    # Maximum amount of private waypoints/folders a player can have. Players with the permission waypoints.unlimited are not affected by this restriction
+    limit: 200
+
+    # Limit values to check for in permissions.
+    # For waypoints the checked permission looks like "waypoints.limit.waypoints.NUMBER" and for folders "waypoints.limit.folders.NUMBER"
+    # If the player has this permission, his limit is lifted to NUMBER. Higher numbers are checked first       
+    permissionLimits:
+      - 400
+
+    # These settings are only applicable if the feature "publicOwnership.waypoints" is enabled
+    public:
+      # Maximum amount of public waypoints/folders a player without the permission waypoints.modify.public can create
+      limit: 20
+
+      # Limit values to check for in permissions.
+      # For waypoints the checked permission looks like "waypoints.limit.waypoints.public.NUMBER" and for folders "waypoints.limit.folders.public.NUMBER"
+      # If the player has this permission, his limit is lifted to NUMBER. Higher numbers are checked first       
+      permissionLimits:
+        - 40
+
+    # Allow or disallow duplicate names for private, public or permission waypoints/folders
+    allowDuplicateNames:
+      private: true
+      public: false
+      permission: false
+  folders:
+    # Maximum amount of private waypoints/folders a player can have. Players with the permission waypoints.unlimited are not affected by this restriction
+    limit: 20
+
+    # Limit values to check for in permissions.
+    # For waypoints the checked permission looks like "waypoints.limit.waypoints.NUMBER" and for folders "waypoints.limit.folders.NUMBER"
+    # If the player has this permission, his limit is lifted to NUMBER. Higher numbers are checked first       
+    permissionLimits:
+      - 40
+
+    # These settings are only applicable if the feature "publicOwnership.waypoints" is enabled
+    public:
+      # Maximum amount of public waypoints/folders a player without the permission waypoints.modify.public can create
+      limit: 2
+
+      # Limit values to check for in permissions.
+      # For waypoints the checked permission looks like "waypoints.limit.waypoints.public.NUMBER" and for folders "waypoints.limit.folders.public.NUMBER"
+      # If the player has this permission, his limit is lifted to NUMBER. Higher numbers are checked first       
+      permissionLimits:
+        - 4
+
+    # Allow or disallow duplicate names for private, public or permission waypoints/folders
+    allowDuplicateNames:
+      private: true
+      public: false
+      permission: false
+teleport:
+  # When a player clicks the teleport button he has to stand still for at least x amount of time before getting teleported.
+  # Set to 0s to disable
+  standStillTime: 3s
+
+  # The radius in blocks a player needs to be in from a waypoint to mark that waypoint as visited for the player
+  # This should be bigger or the same size as the disableWhenReached radius
+  visitedRadius: 10
+
+  # cooldown:
+  # The cooldown between each teleportation for a player
+  # Set to 0s to disable
+
+  # alsoApplyCooldownTo:
+  # When teleporting to a waypoint of this type, all listed types will also receive the same cooldown as this one
+
+  # mustVisit:
+  # If set to true, the player must have visited the waypoint before.
+  # To mark a waypoint as visited the player must have either created it at his current location without coordinates
+  # or have the waypoint selected and reach the visited radius
+  # Only applicable to non-death waypoints
+
+  # onlyLastWaypoint:
+  # Allows the player to only teleport to the last location they died at, not all of them.
+  # Only applicable to death waypoints
+
+  # paymentType:
+  # Available types are: disabled, free, xp (levels), xp_points, vault (your economy plugins currency)
+  # When using the payment method xp the returned value is rounded to the closest full value
+
+  # perCategory:
+  # Optionally the counter can be applied to the entire category (e.g. private, death, public, permission) per player or per waypoint per player
+  # This only affects the price of the teleportation
+
+  # maxCost:
+  # The maximum cost at which the result of the formula is capped at
+
+  # formula:
+  # You can provide a formula to calculate the price
+  # The following variables are available:
+  # - n => how often a player teleported
+  # - distance => the distance between the player and waypoint
+
+  # differentWorld.allow:
+  # Set to false to disallow teleportations to other worlds
+
+  # differentWorld.distance:
+  # The distance to assume between the player and waypoint if they are in different worlds, because now they cannot be properly measured anymore
+  private:
+    cooldown: 1d
+    alsoApplyCooldownTo:
+      - DEATH
+    mustVisit: true
+    onlyLastWaypoint: false
+    paymentType: DISABLED
+    perCategory: true
+    maxCost: 10
+    formula: 1 + n
+    differentWorld:
+      allow: true
+      distance: 1000.0
+  death:
+    cooldown: 1d
+    alsoApplyCooldownTo:
+      - PRIVATE
+    mustVisit: false
+    onlyLastWaypoint: true
+    paymentType: DISABLED
+    perCategory: true
+    maxCost: 10
+    formula: '10'
+    differentWorld:
+      allow: true
+      distance: 1000.0
+  public:
+    cooldown: 1d
+    alsoApplyCooldownTo: []
+    mustVisit: true
+    onlyLastWaypoint: false
+    paymentType: DISABLED
+    perCategory: false
+    maxCost: 8
+    formula: 2 + n
+    differentWorld:
+      allow: true
+      distance: 1000.0
+  permission:
+    cooldown: 4h
+    alsoApplyCooldownTo: []
+    mustVisit: false
+    onlyLastWaypoint: false
+    paymentType: DISABLED
+    perCategory: false
+    maxCost: 3
+    formula: n
+    differentWorld:
+      allow: true
+      distance: 1000.0
+integrations:
+  geyser:
+    enabled: false
+
+    # The icons to use for the tracking request menu
+    icon:
+      accept: textures/ui/confirm
+      decline: textures/ui/redX1
+  generalWebMapSettings:
+    # Show public waypoints on the installed web map
+    showPublicWaypoints: true
+
+    # Show permission waypoints on the installed web map.
+    # WARNING: This will expose the location of permission waypoints to every player.
+    showPermissionWaypoints: false
+
+    # Show private waypoints on the installed web map.
+    # WARNING: This will expose the location of all private waypoints of every player.
+    showPrivateWaypoints: false
+  dynmap:
+    enabled: true
+
+    # See https://github.com/webbukkit/dynmap/wiki/Using-Markers#marker-icons for more information
+    icon: default
+  squaremap:
+    enabled: true
+
+    # The icon id must either be the full key of an existing icon that got registered by another plugin (see "plugins/squaremap/web/images/icon/registered")
+    # Or it must be the name of an icon in the folder "plugins/Waypoints/icons".
+    # Examples:
+    # plugins/squaremap/web/images/icon/registered/squaremap-spawn_icon.png -> squaremap-spawn_icon.png
+    # plugins/Waypoints/icons/special.png -> special
+    icon: w
+    iconSize: 20
+  pl3xmap:
+    enabled: true
+
+    # The icon id must either be the full key of an existing icon that got registered by another plugin (see "plugins/Pl3xMap/web/images/icon/registered")
+    # Or it must be the name of an icon in the folder "plugins/Waypoints/icons".
+    # Examples:
+    # plugins/Pl3xMap/web/images/icon/registered/spawn.png -> spawn
+    # plugins/Waypoints/icons/special.png -> special
+    icon: w
+    iconSize: 20.0
+  bluemap:
+    enabled: true
+playerTracking:
+  enabled: false
+
+  # When true, players can enable / disable being able to be tracked in the GUI
+  toggleable: true
+
+  # When true, players can only track other players when they themselves can be tracked by other players
+  trackingRequiresTrackable: false
+  request:
+    # When true, the player to be tracked first needs to accept the request of the tracking player to begin tracking
+    enabled: false
+
+    # The amount of time the request is valid for
+    validFor: 30s
+
+  # When true, the tracked player is notified when someone starts to track them
+  notification: true
+
+# Customize the used sounds
+# For available names enter "/playsound" and view the suggested sounds. Technically custom sounds from resource packs can also be used
+# Pitch and volume can both be customized
+sounds:
+  openGui:
+    name: block.ender_chest.open
+    volume: 0.5
+  click:
+    normal:
+      name: ui.button.click
+      volume: 0.3
+    danger:
+      name: block.lava.pop
+      volume: 0.75
+    dangerAbort:
+      name: block.lava.extinguish
+      volume: 0.5
+    success:
+      name: entity.player.levelup
+      volume: 0.5
+      pitch: 2.0
+    error:
+      name: entity.villager.hurt
+      volume: 0.5
+      pitch: 1.5
+  waypoint:
+    created:
+      name: block.beacon.activate
+      pitch: 1.5
+    selected:
+      name: block.beacon.power_select
+      volume: 0.5
+  player:
+    selected:
+      name: block.beacon.power_select
+      volume: 0.5
+    notification:
+      name: entity.wither.spawn
+      volume: 0.1
+  teleport:
+    name: entity.enderman.teleport
+    volume: 0.5
+pointers:
+  # Automatically deselects the waypoint when the player gets into the defined radius. Set to zero to disable
+  disableWhenReachedRadius: 5
+
+  # Connected worlds in this list allow the translation of the coordinates 1:8, so you can for example navigate in the nether to a waypoint in the overworld
+  connectedWorlds:
+    - overworld: world
+      underworld: world_nether
+  hologram:
+    enabled: true
+    interval: 5
+
+    # Minimum horizontal distance from the player. When within this range of the waypoint, the hologram snaps to the waypoint location.
+    minDistanceFromPlayer: 8
+
+    # Maximum horizontal distance the hologram appears from the player. When farther than this, the hologram is clamped to this distance.
+    maxDistanceFromPlayer: 16
+
+    # Height of the label above the beam base (ground level). Default 3.0 puts the text just above the player's head, visible through the beam.
+    hologramHeightOffset: 3.0
+
+    # Text scale when the player is close (at or within minDistanceFromPlayer).
+    textScaleNear: 1.5
+
+    # Text scale when the player is at maxDistanceFromPlayer or beyond. Linearly interpolated between near and far as the player moves.
+    textScaleFar: 4.0
+
+    # How many blocks to push the text label toward the player so it renders in front of the beam. Increase if text still appears behind the beam.
+    textForwardOffset: 2.0
+
+    # Settings for the beacon beam rendered above the hologram
+    beam:
+      enabled: true
+
+      # How tall the beam is in blocks
+      height: 30.0
+
+      # How wide the beam is in blocks
+      width: 0.25
+
+      # The block used to render the beam. Stained glass variants work well for a colored, semi-transparent beam.
+      block: cyan_stained_glass
+
+      # Outer shell rendered around the inner beam for a layered beacon-beam depth effect
+      outer:
+        enabled: true
+
+        # How much extra width to add to each side of the outer shell relative to the inner beam width
+        extraWidth: 0.15
+
+        # Block for the outer shell. A more transparent block (e.g. plain glass) creates a natural glow-fade effect.
+        block: glass
+
+        # Brightness override for the outer shell (0-15). Lower values make the shell appear dimmer than the inner beam.
+        brightness: 10

@@ -6,7 +6,6 @@ import com.okkero.skedule.withSynchronizationContext
 import de.md5lukas.commons.paper.placeholder
 import de.md5lukas.kinvs.GUIPattern
 import de.md5lukas.kinvs.items.GUIItem
-import me.miscodes.signgui.SignGUI
 import me.miscodes.waypoints.WaypointsPermissions
 import me.miscodes.waypoints.api.Icon
 import me.miscodes.waypoints.api.Type
@@ -36,7 +35,6 @@ class WaypointPage(wpGUI: WaypointsGUI, private val waypoint: Waypoint) :
      * - y = WebMap custom icon
      * - f = Move to folder
      * - r = rename
-     * - o = Edit custom description
      * - d = Delete
      * - t = Teleport
      * - h = Share
@@ -47,7 +45,7 @@ class WaypointPage(wpGUI: WaypointsGUI, private val waypoint: Waypoint) :
             "u_p_w_y_i",
             "e_____r__",
             "_f__s__g_",
-            "__h___o__",
+            "__h______",
             "d___t___b",
         )
   }
@@ -403,32 +401,6 @@ class WaypointPage(wpGUI: WaypointsGUI, private val waypoint: Waypoint) :
                     .onClose { wpGUI.schedule { wpGUI.gui.open() } }
                     .open(wpGUI.viewer)
                 wpGUI.playSound { click.normal }
-              }
-            } else {
-              background
-            },
-        'o' to
-            if (canModifyWaypoint && isNotDeathWaypoint) {
-              GUIItem(wpGUI.translations.WAYPOINT_EDIT_DESCRIPTION.item) {
-                wpGUI.viewer.closeInventory()
-                val builder =
-                    SignGUI.newBuilder().plugin(wpGUI.plugin).player(wpGUI.viewer).onClose { lines
-                      ->
-                      wpGUI.skedule {
-                        if (lines.all(String::isBlank)) {
-                          waypoint.setDescription(null)
-                        } else {
-                          waypoint.setDescription(lines.joinToString("\n"))
-                        }
-                        updatePage()
-                        switchContext(SynchronizationContext.SYNC)
-                        wpGUI.playSound { click.success }
-                        wpGUI.gui.open()
-                      }
-                    }
-                waypoint.description?.let { description -> builder.lines(description.split('\n')) }
-                wpGUI.playSound { click.normal }
-                builder.open()
               }
             } else {
               background

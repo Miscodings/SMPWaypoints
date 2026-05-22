@@ -26,7 +26,6 @@ private constructor(
     override val location: Location,
     folder: UUID?,
     name: String,
-    description: String?,
     permission: String?,
     icon: Icon?,
 ) : Waypoint {
@@ -49,7 +48,6 @@ private constructor(
           ),
       folder = row.getUUID("folder"),
       name = row.getString("name"),
-      description = row.getString("description"),
       permission = row.getString("permission"),
       icon = Icon.nullableIcon(row.getBytes("icon")),
   )
@@ -78,14 +76,6 @@ private constructor(
   }
 
   override suspend fun getFullPath(): String = getFolder()?.let { "${it.name}/$name" } ?: name
-
-  override var description: String? = description
-    private set
-
-  override suspend fun setDescription(description: String?) {
-    this.description = description
-    set("description", description)
-  }
 
   override var permission: String? = permission
     private set
@@ -184,7 +174,6 @@ private constructor(
       }
 
   override suspend fun copyOptionalFieldsFrom(other: Waypoint) {
-    setDescription(other.description)
     setIcon(other.icon)
   }
 

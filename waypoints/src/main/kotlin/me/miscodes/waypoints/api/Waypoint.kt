@@ -33,11 +33,6 @@ interface Waypoint : GUIDisplayable, Deletable {
   /** The name of the waypoint, optionally prefixed with the folder name */
   suspend fun getFullPath(): String
 
-  /** The description of the waypoint, null if none has been provided */
-  val description: String?
-
-  suspend fun setDescription(description: String?)
-
   /**
    * The required permission to see this waypoint. Required to be non-null if the waypoint is of
    * type [Type.PERMISSION], null otherwise

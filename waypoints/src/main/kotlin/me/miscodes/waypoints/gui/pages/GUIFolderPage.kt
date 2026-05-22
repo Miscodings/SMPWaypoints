@@ -10,7 +10,6 @@ import de.md5lukas.commons.paper.placeholder
 import de.md5lukas.kinvs.GUIPattern
 import de.md5lukas.kinvs.items.GUIContent
 import de.md5lukas.kinvs.items.GUIItem
-import me.miscodes.signgui.SignGUI
 import me.miscodes.waypoints.WaypointsPermissions
 import me.miscodes.waypoints.api.*
 import me.miscodes.waypoints.api.gui.GUIDisplayable
@@ -269,31 +268,6 @@ class GUIFolderPage(wpGUI: WaypointsGUI, private val guiFolder: GUIFolder) :
                 wpGUI.playSound { click.normal }
                 wpGUI.plugin.pointerManager.disable(wpGUI.viewer) { true }
                 wpGUI.skedule { updateControls(true) }
-              }
-            } else if (
-                guiFolder is Folder &&
-                    (canModify || (pof && (wpGUI.viewer.uniqueId == guiFolder.owner)))
-            ) {
-              GUIItem(wpGUI.translations.FOLDER_EDIT_DESCRIPTION.item) {
-                wpGUI.viewer.closeInventory()
-                val builder =
-                    SignGUI.newBuilder().plugin(wpGUI.plugin).player(wpGUI.viewer).onClose { lines
-                      ->
-                      wpGUI.skedule {
-                        if (lines.all(String::isBlank)) {
-                          guiFolder.setDescription(null)
-                        } else {
-                          guiFolder.setDescription(lines.joinToString("\n"))
-                        }
-                        updateControls()
-                        switchContext(SynchronizationContext.SYNC)
-                        wpGUI.playSound { click.success }
-                        wpGUI.gui.open()
-                      }
-                    }
-                guiFolder.description?.let { description -> builder.lines(description.split('\n')) }
-                wpGUI.playSound { click.normal }
-                builder.open()
               }
             } else {
               background

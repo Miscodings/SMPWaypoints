@@ -93,7 +93,7 @@ class UpdateChecker(
                 )
             )
             .header("Accept", "application/json")
-            .header("User-Agent", "Sytm/waypoints/${plugin.pluginMeta.version}")
+            .header("User-Agent", "Miscodes/SMPWaypoints/${plugin.pluginMeta.version}")
             .GET()
             .build()
 
@@ -104,7 +104,7 @@ class UpdateChecker(
       throw IllegalStateException("Invalid API response (${response.statusCode()} - $body)")
     }
 
-    return response.body().reader().use { Gson().fromJson(it, typeToken).also(::println).first() }
+    return response.body().reader().use { Gson().fromJson(it, typeToken).first() }
   }
 
   private fun isLatestNewer(current: String, latest: String): Boolean {

@@ -20,11 +20,6 @@ interface Folder : GUIFolder, Deletable {
 
   suspend fun setName(name: String)
 
-  /** The description of the folder, null if none has been provided */
-  val description: String?
-
-  suspend fun setDescription(description: String?)
-
   /** The optional customized material this folder should appear as in the GUI */
   val icon: Icon?
 

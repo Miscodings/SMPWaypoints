@@ -26,7 +26,6 @@ private constructor(
     override val type: Type,
     override val owner: UUID?,
     name: String,
-    description: String?,
     icon: Icon?,
 ) : Folder {
 
@@ -40,7 +39,6 @@ private constructor(
       type = Type.valueOf(row.getString("type")),
       owner = row.getUUID("owner"),
       name = row.getString("name"),
-      description = row.getString("description"),
       icon = Icon.nullableIcon(row.getBytes("icon")),
   )
 
@@ -50,14 +48,6 @@ private constructor(
   override suspend fun setName(name: String) {
     this.name = name
     set("name", name)
-  }
-
-  override var description: String? = description
-    private set
-
-  override suspend fun setDescription(description: String?) {
-    this.description = description
-    set("description", description)
   }
 
   override var icon: Icon? = icon

@@ -10,7 +10,7 @@ plugins {
 
 val release = (project.property("release") as String).toBoolean()
 
-description = "Waypoints plugin"
+description = "SMPWaypoints plugin"
 
 dependencies {
   implementation(libs.paper)
@@ -44,12 +44,6 @@ dependencies {
   implementation(libs.pl3xmap)
   implementation(libs.geyser)
 
-  // Testing
-  testImplementation(kotlin("test-junit5"))
-  testImplementation(libs.junitJupiter)
-  testImplementation(libs.mockBukkit)
-  testRuntimeOnly(libs.sqliteJdbc)
-  testRuntimeOnly(libs.junitLauncher)
 }
 
 tasks {
@@ -151,7 +145,6 @@ tasks {
 
   runServer { minecraftVersion(libs.versions.paperTestServer.get().substringBefore('-')) }
 
-  test { useJUnitPlatform() }
 }
 
 runPaper.folia.registerTask()

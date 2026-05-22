@@ -130,6 +130,8 @@ class PointerManager(
 
   @EventHandler
   internal fun onMove(e: PlayerMoveEvent) {
+    if (e.from.blockX == e.to.blockX && e.from.blockY == e.to.blockY && e.from.blockZ == e.to.blockZ) return
+
     val trackables = getCurrentTargets(e.player)
 
     val disableWhenReachedRadius = configuration.disableWhenReachedRadius

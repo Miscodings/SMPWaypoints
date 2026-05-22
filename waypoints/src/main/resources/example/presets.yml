@@ -1,0 +1,18 @@
+# To ease the configuration of the plugin, some opinionated preset options are available that override the options in config.yml
+miscellaneous:
+  # Remove all limits on the amounts of waypoints and folders that can be created
+  removeLimits: false
+
+  # Disable global waypoints entirely
+  disableGlobalWaypoints: false
+
+# Select only the presets you want or combine them to remove all restrictions.
+teleportation:
+  # Everyone can teleport for free
+  everyoneCanTeleport: false
+
+  # Everyone can teleport to everywhere
+  everyoneCanTeleportToEverywhere: false
+
+  # All teleport cooldowns are disabled
+  noTeleportCooldown: false

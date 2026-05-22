@@ -1,7 +1,6 @@
 package me.miscodes.waypoints.util
 
 import de.md5lukas.commons.paper.appendLore
-import de.md5lukas.commons.paper.editMeta
 import de.md5lukas.commons.paper.placeholder
 import de.md5lukas.commons.paper.placeholderIgnoringArguments
 import kotlin.math.roundToInt
@@ -13,7 +12,6 @@ import me.miscodes.waypoints.api.gui.GUIDisplayable
 import me.miscodes.waypoints.api.gui.GUIFolder
 import me.miscodes.waypoints.gui.PlayerTrackingDisplayable
 import me.miscodes.waypoints.gui.SharedDisplayable
-import me.miscodes.waypoints.lang.InventoryTranslation
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Location
@@ -45,13 +43,6 @@ class APIExtensions(private val plugin: WaypointsPlugin) {
           Type.PERMISSION -> translations.WAYPOINT_ICON_PERMISSION
         }.getItem(icon?.asItemStack(), *getResolvers(player))
 
-    when (type) {
-      Type.DEATH -> null
-      Type.PRIVATE -> translations.WAYPOINT_ICON_PRIVATE_CUSTOM_DESCRIPTION
-      Type.PUBLIC -> translations.WAYPOINT_ICON_PUBLIC_CUSTOM_DESCRIPTION
-      Type.PERMISSION -> translations.WAYPOINT_ICON_PERMISSION_CUSTOM_DESCRIPTION
-    }?.let { stack.applyDescription(it, description) }
-
     val owner = this.owner
     if (
         type == Type.PUBLIC &&
@@ -75,7 +66,6 @@ class APIExtensions(private val plugin: WaypointsPlugin) {
   ): Array<TagResolver> {
     val base = ArrayList<TagResolver>(12)
     base.add("name" placeholder name)
-    base.add("description" placeholder (description ?: ""))
     base.add("created_at" placeholder createdAt)
     base.add(
         "world" placeholder
@@ -163,19 +153,11 @@ class APIExtensions(private val plugin: WaypointsPlugin) {
         }.getItem(
             icon?.asItemStack(),
             "name" placeholder name,
-            "description" placeholder (description ?: ""),
             "created_at" placeholder createdAt,
             "amount" placeholder fetchedAmount,
         )
 
     stack.amountClamped = fetchedAmount
-
-    when (type) {
-      Type.DEATH -> null
-      Type.PRIVATE -> translations.FOLDER_ICON_PRIVATE_CUSTOM_DESCRIPTION
-      Type.PUBLIC -> translations.FOLDER_ICON_PUBLIC_CUSTOM_DESCRIPTION
-      Type.PERMISSION -> translations.FOLDER_ICON_PERMISSION_CUSTOM_DESCRIPTION
-    }?.let { stack.applyDescription(it, description) }
 
     val owner = this.owner
     if (
@@ -211,16 +193,4 @@ class APIExtensions(private val plugin: WaypointsPlugin) {
     return stack
   }
 
-  private fun ItemStack.applyDescription(translation: InventoryTranslation, description: String?) {
-    description?.let {
-      val (line1, line2, line3, line4) = it.split('\n')
-      val customDescription = mutableListOf<Component>(Component.empty())
-      customDescription +=
-          translation.withReplacements(
-              "description1" placeholder "$line1 $line2".trim(),
-              "description2" placeholder "$line3 $line4".trim(),
-          )
-      editMeta { meta -> meta.lore((meta.lore() ?: emptyList()) + customDescription) }
-    }
-  }
 }

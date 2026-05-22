@@ -1,6 +1,6 @@
-# CKSMPWaypoints
+# SMPWaypoints
 
-A Minecraft Paper/Folia waypoint plugin for CKSMP, styled after the waypoint system in Wynncraft.
+A Minecraft Paper/Folia waypoint plugin styled after the waypoint system in Wynncraft.
 
 ## Indicator
 
