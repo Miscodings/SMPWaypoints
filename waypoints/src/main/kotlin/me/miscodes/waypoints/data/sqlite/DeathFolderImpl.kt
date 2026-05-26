@@ -34,14 +34,6 @@ class DeathFolderImpl(
   override suspend fun setName(name: String) =
       throw UnsupportedOperationException("Changing the name of the death folder is not supported")
 
-  override val description: String?
-    get() = null
-
-  override suspend fun setDescription(description: String?) =
-      throw UnsupportedOperationException(
-          "Changing the description of the death folder is not supported"
-      )
-
   override val icon: Icon?
     get() = null
 
